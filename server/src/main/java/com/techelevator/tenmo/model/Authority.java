@@ -20,6 +20,7 @@ public class Authority {
 
    @Override
    public boolean equals(Object o) {
+      int change = 0;
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       Authority authority = (Authority) o;
