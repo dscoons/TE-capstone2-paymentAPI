@@ -16,10 +16,12 @@ import java.util.List;
 public class JdbcUserDao implements UserDao {
 
     private JdbcTemplate jdbcTemplate;
-
+    private JdbcAccountDao jdbcAccountDao;
     public JdbcUserDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.jdbcAccountDao = new JdbcAccountDao(jdbcTemplate);
     }
+
 
     @Override
     public int findIdByUsername(String username) {
@@ -63,12 +65,10 @@ public class JdbcUserDao implements UserDao {
         Integer newUserId;
         try {
             newUserId = jdbcTemplate.queryForObject(sql, Integer.class, username, password_hash);
+            jdbcAccountDao.createAccount(newUserId);
         } catch (DataAccessException e) {
             return false;
         }
-
-        // TODO: Create the account record with initial balance
-
         return true;
     }
 
