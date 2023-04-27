@@ -41,9 +41,10 @@ public class Account {
        this.balance = this.balance.add(amount);
     }
 
-    public void decrementBalance(BigDecimal amount){
+    public BigDecimal decrementBalance(BigDecimal amount){
         if(this.balance.subtract(amount).compareTo(BigDecimal.ZERO)>=0){
             this.balance = this.balance.subtract(amount);
+            return amount;
         }else{
             throw new LowAccountBalanceException("You don't have enough money");
         }

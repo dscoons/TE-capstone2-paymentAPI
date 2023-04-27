@@ -9,4 +9,5 @@ public interface AccountDao {
     public boolean createAccount(int userId);
     public BigDecimal getBalance(int userId);
     public Account getAccountByUserName(String userName);
+    public boolean updateAccount(Account fromAccount);
 }
