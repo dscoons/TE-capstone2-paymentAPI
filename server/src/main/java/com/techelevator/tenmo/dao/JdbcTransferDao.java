@@ -25,7 +25,7 @@ public class JdbcTransferDao implements TransferDao{
 
     @Override
     public int createTransfer(Transfer transfer) {
-        int transferId = 0;
+        int transferId = -1;
         String sql = "INSERT INTO transfer (from_user_id, to_user_id, amount, status) VALUES (?, ?, ?, ?) returning transfer_id;";
         boolean hasSufficientFunds = (jdbcAccountDao.getBalance(transfer.getFromUserId()).compareTo(transfer.getAmount()) >= 0);
 
@@ -42,7 +42,9 @@ public class JdbcTransferDao implements TransferDao{
                 System.out.println(e.getMessage());
             }
         }
-
+        if(transferId==-1){
+            throw new LowAccountBalanceException("Could not make deposit");
+        }
         return transferId;
     }
 

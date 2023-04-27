@@ -2,15 +2,17 @@ package com.techelevator.tenmo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
 public class Transfer {
+    @NotEmpty
     private int transferId;
     @JsonIgnore
     private int fromUserId;
+    private BigDecimal amount;
     @JsonIgnore
     private int toUserId;
-    private BigDecimal amount;
     private String status;
 
     public Transfer(int fromUserId, int toUserId, BigDecimal amount, String status) {

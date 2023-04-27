@@ -7,6 +7,7 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class TransferController {
     }
 
     @PostMapping("/transfer")
+    @ResponseStatus(HttpStatus.CREATED)
     public Transfer createTransfer(@Valid @RequestBody TransferDTO transferDTO, Principal principal) {
         Account fromAccount = jdbcAccountDao.getAccountByUserName(transferDTO.getFromUsername());
         Account toAccount = jdbcAccountDao.getAccountByUserName(transferDTO.getToUsername());

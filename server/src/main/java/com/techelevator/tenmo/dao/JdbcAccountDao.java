@@ -37,7 +37,7 @@ public class JdbcAccountDao implements AccountDao {
         if (rs.next()) {
             return mapRowToAccount(rs);
         }
-        throw new TenmoAccountNotFoundException("Username does not exist.");
+        throw new TenmoAccountNotFoundException("Username "+userName+" does not exist.");
     }
     @Override
     public boolean createAccount(int userId) {
