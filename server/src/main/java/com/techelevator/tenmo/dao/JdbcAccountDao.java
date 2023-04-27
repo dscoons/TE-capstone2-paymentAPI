@@ -46,7 +46,6 @@ public class JdbcAccountDao implements AccountDao {
         try {
             jdbcTemplate.update(sql, userId);
         } catch (CannotGetJdbcConnectionException | BadSqlGrammarException | DataIntegrityViolationException e) {
-            System.out.println(e.getMessage());
             return false;
         }
         return true;
@@ -58,8 +57,7 @@ public class JdbcAccountDao implements AccountDao {
         if(rs.next()){
             return rs.getBigDecimal("balance");
         }
-        throw new TenmoAccountNotFoundException("User ID doesn't Exist");
-
+        throw new TenmoAccountNotFoundException("User ID " + userId + " doesn't Exist");
     }
 
 
@@ -69,5 +67,17 @@ public class JdbcAccountDao implements AccountDao {
         account.setBalance(rs.getBigDecimal("balance"));
         account.setUserId(rs.getInt("user_id"));
         return account;
+    }
+
+    public boolean updateAccount(Account account) {
+        String sql = "UPDATE account SET balance = ? WHERE user_id = ?";
+        boolean success = false;
+        try {
+            jdbcTemplate.update(sql, account.getBalance(), account.getUserId());
+            success = true;
+        } catch (CannotGetJdbcConnectionException | BadSqlGrammarException | DataIntegrityViolationException e) {
+            return false;
+        }
+        return success;
     }
 }

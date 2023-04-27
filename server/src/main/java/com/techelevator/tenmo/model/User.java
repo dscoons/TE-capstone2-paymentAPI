@@ -1,13 +1,16 @@
 package com.techelevator.tenmo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 public class User {
-
+   @JsonIgnore
    private int id;
    private String username;
+   @JsonIgnore
    private String password;
    private boolean activated;
    private Set<Authority> authorities = new HashSet<>();

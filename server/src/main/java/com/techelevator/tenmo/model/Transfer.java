@@ -9,6 +9,16 @@ public class Transfer {
     private BigDecimal amount;
     private String status;
 
+    public Transfer(int fromUserId, int toUserId, BigDecimal amount, String status) {
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
+        this.amount = amount;
+        this.status = status;
+    }
+
+    public Transfer() {
+    }
+
     public int getId() {
         return id;
     }
@@ -47,5 +57,15 @@ public class Transfer {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Transfer{" +
+                "fromUserId=" + fromUserId +
+                ", toUserId=" + toUserId +
+                ", amount=" + amount +
+                ", status='" + status + '\'' +
+                '}';
     }
 }
