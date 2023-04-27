@@ -1,10 +1,14 @@
 package com.techelevator.tenmo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 
 public class Transfer {
-    private int id;
+    private int transferId;
+    @JsonIgnore
     private int fromUserId;
+    @JsonIgnore
     private int toUserId;
     private BigDecimal amount;
     private String status;
@@ -19,12 +23,12 @@ public class Transfer {
     public Transfer() {
     }
 
-    public int getId() {
-        return id;
+    public int getTransferId() {
+        return transferId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTransferId(int transferId) {
+        this.transferId = transferId;
     }
 
     public int getFromUserId() {

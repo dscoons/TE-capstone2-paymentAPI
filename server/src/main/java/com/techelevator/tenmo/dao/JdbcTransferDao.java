@@ -24,25 +24,26 @@ public class JdbcTransferDao implements TransferDao{
     }
 
     @Override
-    public boolean createTransfer(Transfer transfer) {
-        boolean success = false;
-        String sql = "INSERT INTO transfer (from_user_id, to_user_id, amount, status) VALUES (?, ?, ?, ?);";
+    public int createTransfer(Transfer transfer) {
+        int transferId = 0;
+        String sql = "INSERT INTO transfer (from_user_id, to_user_id, amount, status) VALUES (?, ?, ?, ?) returning transfer_id;";
         boolean hasSufficientFunds = (jdbcAccountDao.getBalance(transfer.getFromUserId()).compareTo(transfer.getAmount()) >= 0);
+
         if (hasSufficientFunds && (transfer.getFromUserId() != transfer.getToUserId())) {
             try {
                 Account fromAccount = jdbcAccountDao.getAccountByUserId(transfer.getFromUserId());
                 Account toAccount = jdbcAccountDao.getAccountByUserId(transfer.getToUserId());
                 fromAccount.decrementBalance(transfer.getAmount());
                 toAccount.incrementBalance(transfer.getAmount());
-                jdbcTemplate.update(sql, transfer.getFromUserId(), transfer.getToUserId(), transfer.getAmount(), transfer.getStatus());
+                transferId =jdbcTemplate.queryForObject(sql, int.class,transfer.getFromUserId(), transfer.getToUserId(), transfer.getAmount(), transfer.getStatus());
                 boolean fromUpdateSuccess = jdbcAccountDao.updateAccount(fromAccount);
                 boolean toUpdateSuccess = jdbcAccountDao.updateAccount(toAccount);
             } catch (LowAccountBalanceException e) {
-                return success;
+                System.out.println(e.getMessage());
             }
-            success = true;
         }
-        return success;
+
+        return transferId;
     }
 
 
@@ -52,7 +53,7 @@ public class JdbcTransferDao implements TransferDao{
         String sql = "SELECT transfer_id, from_user_id, to_user_id, amount, status FROM transfer WHERE from_user_id = ? OR to_user_id = ?;";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId, userId);
-            if (results.next()) {
+            while (results.next()) {
                 transfers.add(mapRowToTransfer(results));
             }
         } catch (DataAccessException e) {
@@ -67,6 +68,8 @@ public class JdbcTransferDao implements TransferDao{
         transfer.setToUserId(rs.getInt("to_user_id"));
         transfer.setAmount(rs.getBigDecimal("amount"));
         transfer.setStatus(rs.getString("status"));
+        transfer.setTransferId(rs.getInt("transfer_id"));
+
         return transfer;
     }
 
