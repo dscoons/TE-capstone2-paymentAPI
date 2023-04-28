@@ -11,6 +11,8 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JdbcAccountDao implements AccountDao {
@@ -32,7 +34,7 @@ public class JdbcAccountDao implements AccountDao {
 
     @Override
     public Account getAccountByUserName(String userName) {
-        String sql = "SELECT account_id, user_id, balance FROM account a JOIN tenmo_user t ON t.user_id = a.user_id WHERE username = ? ;";
+        String sql = "SELECT a.account_id, a.user_id, a.balance FROM account a JOIN tenmo_user t ON t.user_id = a.user_id WHERE username = ? ;";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, userName);
         if (rs.next()) {
             return mapRowToAccount(rs);
@@ -79,5 +81,17 @@ public class JdbcAccountDao implements AccountDao {
             return false;
         }
         return success;
+    }
+
+    public void listAllAccount() {
+        List<Account> accountList = new ArrayList<>();
+        String sql = "SELECT account_id, user_id, balance FROM account";
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while (rowSet.next()){
+            accountList.add(mapRowToAccount(rowSet));
+        }
+        accountList.forEach(account -> {
+            System.out.printf("Account ID: %d User ID: %d\n",account.getAccountId(),account.getUserId());
+        });
     }
 }
