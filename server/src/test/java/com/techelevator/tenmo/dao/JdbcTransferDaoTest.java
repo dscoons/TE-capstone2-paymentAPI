@@ -31,7 +31,7 @@ public class JdbcTransferDaoTest extends BaseDaoTests {
     public void list_user_transfers() {
         List<User> users = userDao.findAll();
         sut.createTransfer(new Transfer(1001, 1002, new BigDecimal("10"), "Approved"));
-        Assert.assertEquals(1, sut.getUserTransfers(1001).size());
+        Assert.assertEquals(1, sut.getAccountTransfers(1001).size());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class JdbcTransferDaoTest extends BaseDaoTests {
         Transfer t = new Transfer(1001, 1002, new BigDecimal("10"), "Approved");
         int transferCreated = sut.createTransfer(t);
         Assert.assertNotNull(transferCreated);
-        List<Transfer> transfers = sut.getUserTransfers(1001);
+        List<Transfer> transfers = sut.getAccountTransfers(1001);
         System.out.println("List size: " + transfers.size());
         Assert.assertEquals(true, new BigDecimal("10").compareTo(transfers.get(0).getAmount()) == 0);
     }

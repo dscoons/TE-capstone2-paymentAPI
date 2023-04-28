@@ -21,18 +21,18 @@ public class JdbcAccountDao implements AccountDao {
     }
 
     @Override
-    public Account getAccountByUserId(int id) {
-        String sql = "SELECT * FROM account WHERE user_id = ?;";
+    public Account getAccountByAccountId(int id) {
+        String sql = "SELECT account_id, user_id, balance FROM account WHERE account_id = ?;";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, id);
         if (rs.next()) {
             return mapRowToAccount(rs);
         }
-        throw new TenmoAccountNotFoundException("User id does not exist.");
+        throw new TenmoAccountNotFoundException("Account id does not exist.");
     }
 
     @Override
     public Account getAccountByUserName(String userName) {
-        String sql = "SELECT * FROM account a JOIN tenmo_user t ON t.user_id = a.user_id WHERE username = ? ;";
+        String sql = "SELECT account_id, user_id, balance FROM account a JOIN tenmo_user t ON t.user_id = a.user_id WHERE username = ? ;";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, userName);
         if (rs.next()) {
             return mapRowToAccount(rs);
@@ -50,14 +50,14 @@ public class JdbcAccountDao implements AccountDao {
         }
         return true;
     }
-    public BigDecimal getBalance(int userId){
-        String sql = "SELECT * FROM account WHERE user_id = ? ";
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql,userId);
+    public BigDecimal getBalance(int accountId){
+        String sql = "SELECT account_id, user_id, balance FROM account WHERE account_id = ? ";
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql,accountId);
 
         if(rs.next()){
             return rs.getBigDecimal("balance");
         }
-        throw new TenmoAccountNotFoundException("User ID " + userId + " doesn't Exist");
+        throw new TenmoAccountNotFoundException("Account ID " + accountId + " doesn't Exist");
     }
 
 

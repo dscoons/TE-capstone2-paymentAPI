@@ -9,15 +9,15 @@ public class Transfer {
     @NotEmpty
     private int transferId;
     @JsonIgnore
-    private int fromUserId;
+    private int fromAccountId;
     private BigDecimal amount;
     @JsonIgnore
-    private int toUserId;
+    private int toAccountId;
     private String status;
 
-    public Transfer(int fromUserId, int toUserId, BigDecimal amount, String status) {
-        this.fromUserId = fromUserId;
-        this.toUserId = toUserId;
+    public Transfer(int fromAccountId, int toAccountId, BigDecimal amount, String status) {
+        this.fromAccountId = fromAccountId;
+        this.toAccountId = toAccountId;
         this.amount = amount;
         this.status = status;
     }
@@ -33,20 +33,20 @@ public class Transfer {
         this.transferId = transferId;
     }
 
-    public int getFromUserId() {
-        return fromUserId;
+    public int getFromAccountId() {
+        return fromAccountId;
     }
 
-    public void setFromUserId(int fromUserId) {
-        this.fromUserId = fromUserId;
+    public void setFromAccountId(int fromAccountId) {
+        this.fromAccountId = fromAccountId;
     }
 
-    public int getToUserId() {
-        return toUserId;
+    public int getToAccountId() {
+        return toAccountId;
     }
 
-    public void setToUserId(int toUserId) {
-        this.toUserId = toUserId;
+    public void setToAccountId(int toAccountId) {
+        this.toAccountId = toAccountId;
     }
 
     public BigDecimal getAmount() {
@@ -68,8 +68,8 @@ public class Transfer {
     @Override
     public String toString() {
         return "Transfer{" +
-                "fromUserId=" + fromUserId +
-                ", toUserId=" + toUserId +
+                "fromAccountId=" + fromAccountId +
+                ", toAccountId=" + toAccountId +
                 ", amount=" + amount +
                 ", status='" + status + '\'' +
                 '}';
