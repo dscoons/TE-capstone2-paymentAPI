@@ -1,12 +1,17 @@
-package com.techelevator.tenmo.dao;
+package com.techelevator.dao;
 
 import com.techelevator.dao.BaseDaoTests;
+import com.techelevator.tenmo.dao.JdbcAccountDao;
+import com.techelevator.tenmo.dao.JdbcTransferDao;
+import com.techelevator.tenmo.dao.JdbcUserDao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
@@ -25,21 +30,26 @@ public class JdbcTransferDaoTest extends BaseDaoTests {
         userDao = new JdbcUserDao(jdbcTemplate);
         accountDao = new JdbcAccountDao(jdbcTemplate);
         sut = new JdbcTransferDao(jdbcTemplate);
+
     }
+
 
     @Test
     public void list_user_transfers() {
-        List<User> users = userDao.findAll();
-        sut.createTransfer(new Transfer(1001, 1002, new BigDecimal("10"), "Approved"));
-        Assert.assertEquals(1, sut.getAccountTransfers(1001).size());
+
+        accountDao.listAllAccount();
+        sut.createTransfer(new Transfer(2001, 2002, new BigDecimal("10"), "Approved"));
+        Assert.assertEquals(1, sut.getAccountTransfers(2002).size());
     }
 
     @Test
     public void createNewTransfer() {
-        Transfer t = new Transfer(1001, 1002, new BigDecimal("10"), "Approved");
+
+        Transfer t = new Transfer(2001, 2002, new BigDecimal("10"), "Approved");
         int transferCreated = sut.createTransfer(t);
         Assert.assertNotNull(transferCreated);
-        List<Transfer> transfers = sut.getAccountTransfers(1001);
+
+        List<Transfer> transfers = sut.getAccountTransfers(2001);
         System.out.println("List size: " + transfers.size());
         Assert.assertEquals(true, new BigDecimal("10").compareTo(transfers.get(0).getAmount()) == 0);
     }

@@ -7,8 +7,9 @@ import com.techelevator.tenmo.model.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.springframework.jdbc.core.JdbcTemplate;
-
+@DisplayName("Account Should")
 public class JdbcAccountDaoTest extends BaseDaoTests{
     private JdbcAccountDao sut;
 
@@ -17,13 +18,17 @@ public class JdbcAccountDaoTest extends BaseDaoTests{
     public void setup() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         sut = new JdbcAccountDao(jdbcTemplate);
+
+
     }
 
     @Test
     public void createNewUser() {
-        boolean accountCreated = sut.createAccount(1001);
+        boolean accountCreated = sut.createAccount(1002);
         Assert.assertTrue(accountCreated);
-        //User user = sut.findByUsername("TEST_USER");
-       // Assert.assertEquals("TEST_USER", user.getUsername());
+        sut.createAccount(1001);
+        Account account = sut.getAccountByUserName("bob");
+        Assert.assertEquals(2001, account.getAccountId());
     }
+
 }
