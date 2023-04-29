@@ -38,7 +38,7 @@ public class JdbcTransferDaoTest extends BaseDaoTests {
         accountDao = new JdbcAccountDao(jdbcTemplate);
         sut = new JdbcTransferDao(jdbcTemplate);
         userDao.create("jeff","costas");
-        userDao.create("scott","ooons");
+        userDao.create("scott","coons");
 
 
     }
