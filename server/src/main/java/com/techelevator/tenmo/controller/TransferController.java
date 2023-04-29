@@ -48,11 +48,10 @@ public class TransferController {
     @GetMapping("/transfers/{id}")
     public Transfer getTransfersById(@PathVariable int id, Principal principal) {
         Account account = jdbcAccountDao.getAccountByUserName(principal.getName());
-        Optional<Transfer> transferOptional = jdbcTransferDao.getAccountTransfers(account.getAccountId()).stream().filter(t -> t.getTransferId() == id).findFirst();
-        if (transferOptional.isPresent()) {
-            return transferOptional.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        return jdbcTransferDao.getAccountTransfers(account.getAccountId())
+                .stream()
+                .filter(t -> t.getTransferId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

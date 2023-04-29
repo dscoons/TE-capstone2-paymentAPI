@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.exceptions.LowAccountBalanceException;
+import com.techelevator.tenmo.exceptions.SelfTransferException;
 import com.techelevator.tenmo.exceptions.TransferIdNotFoundException;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
@@ -26,11 +27,14 @@ public class JdbcTransferDao implements TransferDao{
 
     @Override
     public int createTransfer(Transfer transfer) {
+        if(transfer.getFromAccountId() == transfer.getToAccountId()){
+            throw new SelfTransferException("You are Attempting to Make a Transfer To Yourself, Please Enter a Different Account ID");
+        }
         int transferId = -1;
         String sql = "INSERT INTO transfer (from_account_id, to_account_id, amount, status) VALUES (?, ?, ?, ?) returning transfer_id;";
         boolean hasSufficientFunds = (jdbcAccountDao.getBalance(transfer.getFromAccountId()).compareTo(transfer.getAmount()) >= 0);
 
-        if (hasSufficientFunds && (transfer.getFromAccountId() != transfer.getToAccountId())) {
+        if (hasSufficientFunds) {
             try {
                 Account fromAccount = jdbcAccountDao.getAccountByAccountId(transfer.getFromAccountId());
                 Account toAccount = jdbcAccountDao.getAccountByAccountId(transfer.getToAccountId());

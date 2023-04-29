@@ -34,7 +34,7 @@ public class AccountController {
         Account account  =jdbcAccountDao.getAccountByUserName(principal.getName());
        if(account !=null){
            BigDecimal balance = account.getBalance();
-           return account.getBalance();
+           return balance;
        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND,"userId not found");
     }
