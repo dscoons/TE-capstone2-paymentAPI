@@ -4,18 +4,18 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-public class TransferDTO {
+public class TransferRequestDTO {
     @NotEmpty
-    private String toUsername;
+    private String fromUsername;
     @Positive
     private BigDecimal amount;
 
-    public String getToUsername() {
-        return toUsername;
+    public String getFromUsername() {
+        return fromUsername;
     }
 
-    public void setToUsername(String toUsername) {
-        this.toUsername = toUsername;
+    public void setFromUsername(String fromUsername) {
+        this.fromUsername = fromUsername;
     }
 
     public BigDecimal getAmount() {
